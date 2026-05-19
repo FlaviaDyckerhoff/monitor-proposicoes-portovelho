@@ -2,8 +2,8 @@ name: Monitor Proposições Porto Velho
 
 on:
   schedule:
-    - cron: '0 11 * * *'   # 08:00 BRT
-    - cron: '0 19 * * *'   # 16:00 BRT
+    - cron: '40 11 * * *'   # 08:40 BRT
+    - cron: '40 19 * * *'   # 16:40 BRT
   workflow_dispatch:
 
 jobs:
