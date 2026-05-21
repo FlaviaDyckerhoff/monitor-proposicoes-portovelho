@@ -71,7 +71,7 @@ async function enviarEmail(novas) {
   const blocos = Object.keys(porTipo).sort().map(tipo => {
     const header = `
       <tr>
-        <td colspan="3" style="padding:10px 8px 4px;background:#f0f4f8;font-weight:bold;
+        <td colspan="4" style="padding:10px 8px 4px;background:#f0f4f8;font-weight:bold;
           color:#7b2d00;font-size:13px;border-top:2px solid #7b2d00">
           ${tipo} — ${porTipo[tipo].length} proposição(ões)
         </td>
@@ -79,15 +79,18 @@ async function enviarEmail(novas) {
     const rows = porTipo[tipo].map(p => `
       <tr>
         <td style="padding:8px;border-bottom:1px solid #eee;white-space:nowrap;font-size:13px">
-          <a href="${p.link}" style="color:#7b2d00;font-weight:bold;text-decoration:none">
-            ${p.numero}/${p.ano}
-          </a>
+          ${p.numero}/${p.ano}
         </td>
         <td style="padding:8px;border-bottom:1px solid #eee;color:#888;font-size:12px;white-space:nowrap">
           ${p.data}
         </td>
         <td style="padding:8px;border-bottom:1px solid #eee;font-size:13px">
           ${p.ementa}
+        </td>
+        <td style="padding:8px;border-bottom:1px solid #eee;font-size:12px;white-space:nowrap">
+          <a href="${p.link}" style="color:#7b2d00;font-weight:bold;text-decoration:none" target="_blank">
+            Abrir proposição
+          </a>
         </td>
       </tr>`).join('');
     return header + rows;
@@ -96,7 +99,7 @@ async function enviarEmail(novas) {
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:860px;margin:0 auto">
       <h2 style="color:#7b2d00;border-bottom:2px solid #7b2d00;padding-bottom:8px">
-        🏛️ Câmara Porto Velho — ${novas.length} nova(s) proposição(ões)
+        🏛️ Câmara Municipal de Porto Velho — ${novas.length} nova(s) proposição(ões)
       </h2>
       <p style="color:#666;margin-top:0">Monitoramento automático — ${new Date().toLocaleString('pt-BR')}</p>
       <table style="width:100%;border-collapse:collapse;font-size:14px">
@@ -105,20 +108,21 @@ async function enviarEmail(novas) {
             <th style="padding:10px;text-align:left;white-space:nowrap">Número/Ano</th>
             <th style="padding:10px;text-align:left;white-space:nowrap">Data</th>
             <th style="padding:10px;text-align:left">Ementa</th>
+            <th style="padding:10px;text-align:left">Link</th>
           </tr>
         </thead>
         <tbody>${blocos}</tbody>
       </table>
       <p style="margin-top:20px;font-size:12px;color:#999">
-        Pesquisa completa: <a href="https://sapl.portovelho.ro.leg.br/materia/pesquisar-materia">sapl.portovelho.ro.leg.br</a>
+        Pesquisa completa: <a href="https://sapl.portovelho.ro.leg.br/materia/pesquisar-materia">SAPL da Câmara Municipal de Porto Velho</a>
       </p>
     </div>
   `;
 
   await transporter.sendMail({
-    from: `"Monitor Câmara PVH" <${EMAIL_REMETENTE}>`,
+    from: `"Monitor Porto Velho" <${EMAIL_REMETENTE}>`,
     to: EMAIL_DESTINO,
-    subject: `🏛️ Câmara PVH: ${novas.length} nova(s) proposição(ões) — ${new Date().toLocaleDateString('pt-BR')}`,
+    subject: `🏛️ Porto Velho: ${novas.length} nova(s) proposição(ões) — ${new Date().toLocaleDateString('pt-BR')}`,
     html,
   });
 
