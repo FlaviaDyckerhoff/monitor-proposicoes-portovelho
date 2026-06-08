@@ -126,6 +126,12 @@ function extrairTipo(str) {
   return match ? match[1].trim().toUpperCase() : str.split(' ')[0].toUpperCase();
 }
 
+function normalizarEmenta(str) {
+  return String(str || '-')
+    .replace(/\s+/g, ' ')
+    .trim() || '-';
+}
+
 function prioridadeTipoEmail(tipo) {
   const t = String(tipo || '')
     .normalize('NFD')
@@ -242,7 +248,7 @@ async function enviarEmail(novas) {
       numero: String(p.numero),
       ano: String(p.ano),
       data: normalizarData(p.data_apresentacao),
-      ementa: (p.ementa || '-').substring(0, 250),
+      ementa: normalizarEmenta(p.ementa),
       link: `${SITE_BASE}${p.link_detail_backend}`,
     }));
 
