@@ -1,5 +1,6 @@
 const fs = require('fs');
 const https = require('https');
+const { avaliarInteresse4um } = require('./interesses-clientes');
 
 const EMAIL_DESTINO = process.env.EMAIL_DESTINO;
 const EMAIL_REMETENTE = process.env.EMAIL_REMETENTE;
@@ -335,6 +336,15 @@ function renderRadar03EmailButton(novas) {
     '</div>';
 }
 
+function renderEmentaComInteresse(p) {
+  const ementa = radar03Escape(p.ementa);
+  const interesse = avaliarInteresse4um(p);
+  if (!interesse) return ementa;
+  return ementa + '<div style="margin-top:6px;color:#1e40af;font-size:11px">' +
+    '<strong>🔎 Interesse potencial — conferir: 4UM/Opportunity</strong><br>' +
+    radar03Escape(interesse.motivos.join(' · ')) + '</div>';
+}
+
 async function enviarEmail(novas) {
   if (CONTROLE03_FORCE_LATEST) {
     console.log('📌 Modo Controle 03: email de novidades não enviado.');
@@ -376,7 +386,7 @@ async function enviarEmail(novas) {
           ${p.data}
         </td>
         <td style="padding:8px;border-bottom:1px solid #eee;font-size:13px">
-          ${p.ementa}
+          ${renderEmentaComInteresse(p)}
         </td>
         <td style="padding:8px;border-bottom:1px solid #eee;font-size:12px;white-space:nowrap">
           <a href="${p.link}" style="color:#7b2d00;font-weight:bold;text-decoration:none" target="_blank">
