@@ -1,3 +1,4 @@
+// DM45934: BR-364/RO confirmada na ANTT; inclui hífens Unicode sem ampliar rodovias.
 // Triagem de possível interesse, não associação de cliente nem notificação.
 // Escopo: proposições municipais de Porto Velho, cliente 4UM/Opportunity.
 function normalizar(valor) {
@@ -7,7 +8,7 @@ function normalizar(valor) {
 function avaliarInteresse4um(proposicao) {
   const texto = normalizar(proposicao?.ementa);
   const motivos = [];
-  if (/\bbr[\s.\-–—]*364\b/.test(texto)) motivos.push('BR-364');
+  if (/\bbr[\s.\-‐‑–—]*364\b/.test(texto)) motivos.push('BR-364');
   if (/\bfaixa\s+(?:de\s+dominio|nao\s+edificavel)\b/.test(texto)) motivos.push('faixa de domínio / não edificável');
   if (/\bpedagio\b|\bconcess(?:ao|oes)\s+(?:de\s+)?rodovia|\bconcessionaria\s+(?:de\s+)?rodovia|\bseguranca\s+rodoviaria\b|\bacesso\s+rodoviario\b/.test(texto)) motivos.push('operação / concessão rodoviária');
   if (/\b4um\b|\bnova\s*364\b/.test(texto)) motivos.push('referência nominal ao cliente / operação');
