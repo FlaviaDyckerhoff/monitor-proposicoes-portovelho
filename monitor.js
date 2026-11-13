@@ -1,3 +1,5 @@
+const mlPropsPriority = require('./priority_terms');
+
 const fs = require('fs');
 const https = require('https');
 const { avaliarInteresse4um } = require('./interesses-clientes');
@@ -336,7 +338,11 @@ function renderRadar03EmailButton(novas) {
     '</div>';
 }
 
-function renderEmentaComInteresse(p) {
+function renderEmentaComInteresse(p, ...args) {
+  return mlPropsPriority.priorityEmenta(renderEmentaComInteresseAntesPrioridade(p, ...args), p);
+}
+
+function renderEmentaComInteresseAntesPrioridade(p) {
   const ementa = radar03Escape(p.ementa);
   const interesse = avaliarInteresse4um(p);
   if (!interesse) return ementa;
@@ -424,7 +430,7 @@ async function enviarEmail(novas) {
   await transporter.sendMail({
     from: `"Monitor Porto Velho" <${EMAIL_REMETENTE}>`,
     to: EMAIL_DESTINO,
-    subject: `🏛️ Porto Velho: ${novas.length} nova(s) proposição(ões) — ${new Date().toLocaleDateString('pt-BR')}`,
+    subject: mlPropsPriority.prioritySubject(novas, `🏛️ Porto Velho: ${novas.length} nova(s) proposição(ões) — ${new Date().toLocaleDateString('pt-BR')}`),
     html,
   });
 
