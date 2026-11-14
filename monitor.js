@@ -1,3 +1,4 @@
+const lacunas03 = require('./lacunas03');
 const mlPropsPriority = require('./priority_terms');
 
 const fs = require('fs');
@@ -427,7 +428,7 @@ async function enviarEmail(novas) {
     </div>
   `;
 
-  await transporter.sendMail({
+  await lacunas03.sendMail.bind(null, transporter, {casa: CASA_RADAR03, stateUrl: CONTROLE03_STATE_URL, headers: radar03AuthHeaders})({
     from: `"Monitor Porto Velho" <${EMAIL_REMETENTE}>`,
     to: EMAIL_DESTINO,
     subject: mlPropsPriority.prioritySubject(novas, `🏛️ Porto Velho: ${novas.length} nova(s) proposição(ões) — ${new Date().toLocaleDateString('pt-BR')}`),
